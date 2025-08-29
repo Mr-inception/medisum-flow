@@ -2,41 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Medical Summarization Challenge Design System */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Medical Color Palette */
+    --background: 240 50% 98%;
+    --foreground: 215 25% 27%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 25% 27%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 215 25% 27%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Medical Blue Primary */
+    --primary: 204 70% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 204 70% 47%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Professional Secondary */
+    --secondary: 215 25% 97%;
+    --secondary-foreground: 215 25% 27%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted Medical Grays */
+    --muted: 215 20% 95%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Trust Accent */
+    --accent: 200 95% 95%;
+    --accent-foreground: 204 70% 53%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Medical Alert Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Interface Elements */
+    --border: 215 20% 88%;
+    --input: 215 20% 95%;
+    --ring: 204 70% 53%;
 
-    --radius: 0.5rem;
+    /* Medical Gradients */
+    --gradient-medical: linear-gradient(135deg, hsl(204 70% 53%) 0%, hsl(200 80% 60%) 100%);
+    --gradient-trust: linear-gradient(135deg, hsl(200 95% 95%) 0%, hsl(215 25% 97%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(215 20% 98%) 100%);
+
+    /* Shadows */
+    --shadow-medical: 0 4px 12px -2px hsl(204 70% 53% / 0.15);
+    --shadow-card: 0 4px 16px -4px hsl(215 25% 27% / 0.1);
+    --shadow-elevated: 0 8px 24px -8px hsl(215 25% 27% / 0.15);
+
+    /* Typography */
+    --font-medical: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +125,37 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-medical);
+  }
+}
+
+@layer utilities {
+  .medical-gradient {
+    background: var(--gradient-medical);
+  }
+  
+  .trust-gradient {
+    background: var(--gradient-trust);
+  }
+  
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+  
+  .medical-shadow {
+    box-shadow: var(--shadow-medical);
+  }
+  
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .elevated-shadow {
+    box-shadow: var(--shadow-elevated);
+  }
+  
+  .medical-border {
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
   }
 }
