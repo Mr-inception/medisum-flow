@@ -367,10 +367,10 @@ export default function Analytics() {
               <div className="mt-6 p-4 rounded-lg bg-accent/20">
                 <h3 className="font-medium text-foreground mb-2">Improvement Recommendations</h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Enhance medical terminology training data</li>
-                  <li>• Implement additional context awareness mechanisms</li>
-                  <li>• Strengthen safety validation protocols</li>
-                  <li>• Increase clinical expert review processes</li>
+                  <li>• Optimize PDF processing pipeline for faster document analysis</li>
+                  <li>• Implement advanced medical terminology recognition</li>
+                  <li>• Add multi-language support for international medical documents</li>
+                  <li>• Enhance patient-clinician perspective differentiation</li>
                 </ul>
               </div>
             </CardContent>

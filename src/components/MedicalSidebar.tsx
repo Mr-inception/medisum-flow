@@ -2,14 +2,12 @@ import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-const sidebarItems = [
+const navigationItems = [
   { id: "home", label: "Home", icon: "fas fa-home", path: "/" },
   { id: "dashboard", label: "Dashboard", icon: "fas fa-chart-line", path: "/dashboard" },
-  { id: "summarize", label: "Summarize Q&A", icon: "fas fa-brain", path: "/summarize" },
-  { id: "training", label: "Model Training", icon: "fas fa-cogs", path: "/training" },
-  { id: "dataset", label: "Dataset Management", icon: "fas fa-database", path: "/dataset" },
-  { id: "analytics", label: "Analytics", icon: "fas fa-chart-bar", path: "/analytics" },
-  { id: "settings", label: "Settings", icon: "fas fa-gear", path: "/settings" },
+  { id: "summarize", label: "Summarize", icon: "fas fa-brain", path: "/summarize" },
+  { id: "dataset", label: "Dataset", icon: "fas fa-database", path: "/dataset" },
+  { id: "analytics", label: "Analytics", icon: "fas fa-chart-bar", path: "/analytics" }
 ];
 
 interface MedicalSidebarProps {
@@ -51,7 +49,7 @@ export default function MedicalSidebar({ isCollapsed, setIsCollapsed }: MedicalS
 
       {/* Navigation */}
       <nav className="flex-1 p-2 space-y-1">
-        {sidebarItems.map((item) => {
+        {navigationItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <NavLink

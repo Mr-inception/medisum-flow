@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -11,19 +12,46 @@ export default function Dashboard() {
   ];
 
   const recentActivity = [
-    { time: "2 minutes ago", action: "Patient summary generated", type: "patient", status: "completed" },
-    { time: "5 minutes ago", action: "Clinician report processed", type: "clinician", status: "completed" },
-    { time: "12 minutes ago", action: "Model training iteration #47", type: "training", status: "in-progress" },
-    { time: "18 minutes ago", action: "Dataset validation completed", type: "dataset", status: "completed" },
-    { time: "25 minutes ago", action: "Safety check performed", type: "safety", status: "completed" }
+    { id: 1, time: "2 minutes ago", action: "New medical Q&A processed", type: "processing", status: "completed" },
+    { id: 2, time: "5 minutes ago", action: "PDF document uploaded", type: "upload", status: "completed" },
+    { id: 3, time: "12 minutes ago", action: "AI summary generated", type: "ai", status: "completed" },
+    { id: 4, time: "15 minutes ago", action: "System health check", type: "system", status: "completed" },
+    { id: 5, time: "1 hour ago", action: "Model performance update", type: "ai", status: "completed" }
   ];
 
-  const modelStatus = [
-    { name: "Primary Summarization Model", status: "online", accuracy: 94.2, load: 67 },
-    { name: "Patient-Friendly Translator", status: "online", accuracy: 92.8, load: 45 },
-    { name: "Clinical Terminology Processor", status: "online", accuracy: 96.1, load: 78 },
-    { name: "Safety Validation Engine", status: "online", accuracy: 99.8, load: 23 }
-  ];
+  const [modelStatus, setModelStatus] = useState([
+    { name: "Custom LLM", status: "loading", accuracy: 0, load: 0 },
+  ]);
+
+  // Fetch real-time model status
+  useEffect(() => {
+    const fetchModelStatus = async () => {
+      try {
+        const { llmClient } = await import('@/lib/llm-client');
+        const status = await llmClient.getModelStatus();
+        
+        setModelStatus([{
+          name: "Custom LLM",
+          status: status.status,
+          accuracy: status.accuracy,
+          load: status.load
+        }]);
+      } catch (error) {
+        console.error('Failed to fetch model status:', error);
+        setModelStatus([{
+          name: "Custom LLM",
+          status: "offline",
+          accuracy: 0,
+          load: 0
+        }]);
+      }
+    };
+
+    fetchModelStatus();
+    const interval = setInterval(fetchModelStatus, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="p-6 space-y-6 bg-background min-h-screen">
@@ -112,19 +140,19 @@ export default function Dashboard() {
           <CardContent>
             <div className="space-y-4">
               {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-start space-x-3">
+                <div key={activity.id} className="flex items-start space-x-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs ${
-                    activity.type === 'patient' ? 'bg-primary/10 text-primary' :
-                    activity.type === 'clinician' ? 'bg-success/10 text-success' :
-                    activity.type === 'training' ? 'bg-warning/10 text-warning' :
-                    activity.type === 'dataset' ? 'bg-muted text-muted-foreground' :
+                    activity.type === 'processing' ? 'bg-primary/10 text-primary' :
+                    activity.type === 'upload' ? 'bg-success/10 text-success' :
+                    activity.type === 'ai' ? 'bg-warning/10 text-warning' :
+                    activity.type === 'system' ? 'bg-muted text-muted-foreground' :
                     'bg-secondary text-secondary-foreground'
                   }`}>
                     <i className={`fas ${
-                      activity.type === 'patient' ? 'fa-user' :
-                      activity.type === 'clinician' ? 'fa-user-md' :
-                      activity.type === 'training' ? 'fa-cogs' :
-                      activity.type === 'dataset' ? 'fa-database' :
+                      activity.type === 'processing' ? 'fa-file-medical' :
+                      activity.type === 'upload' ? 'fa-file-upload' :
+                      activity.type === 'ai' ? 'fa-robot' :
+                      activity.type === 'system' ? 'fa-cogs' :
                       'fa-shield-check'
                     }`}></i>
                   </div>
@@ -143,39 +171,6 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Training Progress */}
-      <Card className="card-gradient border-0 card-shadow">
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <i className="fas fa-chart-line text-primary mr-2"></i>
-            Current Training Session
-          </CardTitle>
-          <CardDescription>Model training iteration #47 - Advanced medical terminology processing</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">47/100</div>
-                <div className="text-sm text-muted-foreground">Epochs Completed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">0.0042</div>
-                <div className="text-sm text-muted-foreground">Current Loss</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">2h 15m</div>
-                <div className="text-sm text-muted-foreground">Est. Time Remaining</div>
-              </div>
-            </div>
-            <Progress value={47} className="h-3" />
-            <div className="text-sm text-muted-foreground text-center">
-              Training with advanced medical dataset (15,000 Q&A pairs)
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

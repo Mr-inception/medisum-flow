@@ -86,7 +86,7 @@ export default function Dataset() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Dataset Management</h1>
-          <p className="text-muted-foreground">Manage medical training data and quality validation</p>
+          <p className="text-muted-foreground">Manage medical data and quality validation for AI processing</p>
         </div>
         <div className="flex items-center space-x-2">
           <Badge variant="outline">
@@ -164,7 +164,7 @@ export default function Dataset() {
                 <i className="fas fa-folder-open text-primary mr-2"></i>
                 Active Datasets
               </CardTitle>
-              <CardDescription>Currently available datasets for model training</CardDescription>
+                              <CardDescription>Currently available datasets for AI processing</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -208,7 +208,7 @@ export default function Dataset() {
                 <i className="fas fa-cloud-upload-alt text-primary mr-2"></i>
                 Upload New Dataset
               </CardTitle>
-              <CardDescription>Add new medical Q&A data for model training</CardDescription>
+              <CardDescription>Add new medical Q&A data for AI processing</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">

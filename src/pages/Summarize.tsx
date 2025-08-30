@@ -25,67 +25,50 @@ Treatment modalities include:
     setProgress(0);
     setSummary("");
 
-    // Simulate AI processing with realistic delays
-    const steps = [
-      "Analyzing medical content...",
-      "Processing terminology...",
-      "Adapting to perspective...",
-      "Generating summary...",
-      "Performing safety validation..."
-    ];
+    try {
+      // Import the LLM client
+      const { llmClient } = await import('@/lib/llm-client');
+      
+      // Update progress steps
+      const steps = [
+        "Analyzing medical content...",
+        "Processing terminology...",
+        "Adapting to perspective...",
+        "Generating summary...",
+        "Performing safety validation..."
+      ];
 
-    for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setProgress((i + 1) * 20);
+      for (let i = 0; i < steps.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 400));
+        setProgress((i + 1) * 20);
+      }
+
+      // Call your custom LLM
+      const response = await llmClient.generateSummary({
+        question,
+        answer,
+        perspective,
+        maxLength: 1000,
+        temperature: 0.7
+      });
+
+      setSummary(response.summary);
+      
+      // Show success feedback
+      console.log('Summary generated successfully:', {
+        confidence: response.confidence,
+        processingTime: response.processing_time,
+        safetyScore: response.safety_score
+      });
+
+    } catch (error) {
+      console.error('Failed to generate summary:', error);
+      setSummary(`Error: Failed to generate summary. Please check your LLM backend is running and try again.
+
+Technical details: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsProcessing(false);
     }
-
-    // Generate different summaries based on perspective
-    if (perspective === "patient") {
-      setSummary(`Type 2 diabetes is a condition where your body has trouble using sugar (glucose) properly. This happens when your body becomes resistant to insulin, a hormone that helps sugar enter your cells for energy.
-
-**Common symptoms you might notice:**
-• Feeling very thirsty and urinating frequently
-• Feeling hungrier than usual
-• Unexplained weight loss
-• Feeling tired or weak
-• Blurry vision
-
-**How it's treated:**
-• **Healthy lifestyle changes** - This is very important! Eating nutritious foods, staying active, and maintaining a healthy weight can significantly help manage your diabetes.
-• **Medications** - Your doctor may prescribe medications like metformin to help your body use insulin better. There are several types available depending on your needs.
-• **Regular check-ups** - You'll need regular blood tests to monitor your blood sugar levels and check for any complications.
-• **Preventive care** - This includes eye exams, foot care, and staying up-to-date with vaccinations.
-
-**Important to remember:** With proper management, many people with Type 2 diabetes live healthy, full lives. Work closely with your healthcare team to create a plan that works for you.`);
-    } else {
-      setSummary(`**Clinical Summary: Type 2 Diabetes Mellitus**
-
-**Pathophysiology:** Progressive insulin resistance with relative beta-cell dysfunction leading to hyperglycemia and metabolic dysregulation.
-
-**Clinical Presentation:**
-• Classic triad: polyuria, polydipsia, polyphagia
-• Associated symptoms: unexplained weight loss, fatigue, visual disturbances
-• Risk for acute complications (DKA, HHS) and chronic sequelae
-
-**Evidence-Based Treatment Protocol:**
-1. **First-line therapy:** Metformin (unless contraindicated) - reduces hepatic glucose production, improves insulin sensitivity
-2. **Second-line options:** Based on patient characteristics:
-   - Sulfonylureas (cost-effective, established CV safety)
-   - DPP-4 inhibitors (weight-neutral, low hypoglycemia risk)
-   - GLP-1 agonists (weight loss, CV benefits, renal protection)
-   - SGLT-2 inhibitors (CV/renal benefits, weight loss)
-3. **Insulin therapy:** When target HbA1c not achieved or contraindications to other agents
-
-**Monitoring Protocol:**
-• HbA1c q3-6 months (target <7% for most adults)
-• Annual comprehensive foot exam, dilated eye exam
-• Annual lipid panel, microalbumin screening
-• BP monitoring (target <140/90 mmHg, <130/80 if CV risk)
-
-**Complications surveillance:** Regular screening for nephropathy, retinopathy, neuropathy, and cardiovascular disease per ADA/EASD guidelines.`);
-    }
-
-    setIsProcessing(false);
   };
 
   return (
@@ -94,7 +77,7 @@ Treatment modalities include:
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Medical Q&A Summarization</h1>
-          <p className="text-muted-foreground">Transform medical content for different audiences</p>
+          <p className="text-muted-foreground">Transform medical content using your custom LLM</p>
         </div>
         <div className="flex items-center space-x-2">
           <Badge variant="outline">

@@ -1,73 +1,138 @@
-# Welcome to your Lovable project
+# MediSum - Medical AI Summarization Platform
 
-## Project info
+A React-based medical summarization platform with AI integration for generating patient-friendly and clinician-focused summaries from medical documents and Q&A.
 
-**URL**: https://lovable.dev/projects/9cd513c4-8197-46c8-93c1-c5059fb2a556
+## Features
 
-## How can I edit this code?
+- **PDF Document Processing**: Upload and process medical PDFs directly from the homepage
+- **AI-Powered Summarization**: Intelligent medical content analysis and summarization
+- **Dual Perspectives**: Generate summaries for both patients and healthcare professionals
+- **Real-time Processing**: Live progress tracking and instant results
+- **Medical Safety**: Built-in content validation and safety protocols
+- **Modern UI**: Clean, accessible interface built with shadcn/ui components
 
-There are several ways of editing your application.
+## Quick Start
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9cd513c4-8197-46c8-93c1-c5059fb2a556) and start prompting.
+- Node.js 18+ and npm
+- Python 3.8+ (for AI backend)
+- PyPDF2 for PDF processing
 
-Changes made via Lovable will be committed automatically to this repo.
+### Complete Setup
 
-**Use your preferred IDE**
+1. **Run the setup script:**
+   ```bash
+   cd medisum-flow
+   python setup_complete.py
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. **Start the backend:**
+   ```bash
+   cd medisum-backend
+   python backend_example.py
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. **Start the frontend:**
+   ```bash
+   cd medisum-flow
+   npm run dev
+   ```
 
-Follow these steps:
+4. **Access your system:**
+   - Frontend: http://localhost:3000 (or 8080)
+   - Backend: http://localhost:8000
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## How to Use
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### PDF Document Processing
 
-# Step 3: Install the necessary dependencies.
-npm i
+1. **Upload Medical PDFs**: Drag & drop or click to upload PDF documents
+2. **Choose Perspective**: Select patient-friendly or clinician-focused summaries
+3. **Generate Summaries**: Get AI-powered medical insights instantly
+4. **Copy & Share**: Use the copy button to share summaries
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Medical Q&A Summarization
+
+1. **Navigate to Summarize page**
+2. **Enter medical questions and answers**
+3. **Select target audience (patient/clinician)**
+4. **Generate intelligent summaries**
+
+## API Endpoints
+
+The backend provides these endpoints:
+
+```http
+POST /upload-pdf
+{
+  "pdf_content": "base64_encoded_pdf",
+  "perspective": "patient|clinician",
+  "max_length": 200
+}
+
+POST /generate
+{
+  "question": "Medical question",
+  "answer": "Detailed medical answer", 
+  "perspective": "patient|clinician",
+  "max_tokens": 1000,
+  "temperature": 0.7
+}
+
+GET /status
+GET /health
+POST /validate
 ```
 
-**Edit a file directly in GitHub**
+## Project Structure
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+medisum-flow/
+├── src/                    # React frontend source
+│   ├── pages/             # Application pages
+│   ├── components/        # Reusable UI components
+│   └── lib/               # Utility functions
+├── medisum-backend/       # Flask backend
+│   ├── backend_example.py # Main backend server
+│   └── requirements.txt   # Python dependencies
+├── public/                # Static assets
+└── setup_complete.py      # Project setup script
+```
 
-**Use GitHub Codespaces**
+## Technology Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS, shadcn/ui
+- **Backend**: Flask, PyPDF2, Transformers, PyTorch
+- **AI**: HuggingFace Transformers pipeline
+- **PDF Processing**: PyPDF2 for text extraction
 
-## What technologies are used for this project?
+## Medical Safety Features
 
-This project is built with:
+- **Content Validation**: Built-in safety checks for medical content
+- **Perspective Control**: Tailored summaries for different audiences
+- **Professional Disclaimers**: Clear medical advice disclaimers
+- **Error Handling**: Graceful fallbacks for processing issues
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Contributing
 
-## How can I deploy this project?
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-Simply open [Lovable](https://lovable.dev/projects/9cd513c4-8197-46c8-93c1-c5059fb2a556) and click on Share -> Publish.
+## License
 
-## Can I connect a custom domain to my Lovable project?
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Yes, you can!
+## Support
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+For issues and questions:
+1. Check the troubleshooting section in QUICK_START.md
+2. Review the backend logs for error details
+3. Ensure all dependencies are properly installed
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Disclaimer
+
+This AI-powered medical summarization tool is designed for educational and research purposes only. It is not intended to replace professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers with any questions regarding medical conditions.
