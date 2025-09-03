@@ -5,9 +5,7 @@ import { cn } from "@/lib/utils";
 const navigationItems = [
   { id: "home", label: "Home", icon: "fas fa-home", path: "/" },
   { id: "dashboard", label: "Dashboard", icon: "fas fa-chart-line", path: "/dashboard" },
-  { id: "summarize", label: "Summarize", icon: "fas fa-brain", path: "/summarize" },
-  { id: "dataset", label: "Dataset", icon: "fas fa-database", path: "/dataset" },
-  { id: "analytics", label: "Analytics", icon: "fas fa-chart-bar", path: "/analytics" }
+  { id: "summarize", label: "Summarize", icon: "fas fa-brain", path: "/summarize" }
 ];
 
 interface MedicalSidebarProps {

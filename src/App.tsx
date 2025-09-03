@@ -7,8 +7,6 @@ import MedicalLayout from "./components/MedicalLayout";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Summarize from "./pages/Summarize";
-import Dataset from "./pages/Dataset";
-import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,8 +19,6 @@ function App() {
           <Route index element={<Home />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="summarize" element={<Summarize />} />
-          <Route path="dataset" element={<Dataset />} />
-          <Route path="analytics" element={<Analytics />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

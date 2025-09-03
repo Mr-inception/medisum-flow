@@ -2,13 +2,25 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
+  const [perspective, setPerspective] = useState<"patient" | "clinician">(() => {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('dashboard_perspective') : null;
+    return (saved === 'patient' || saved === 'clinician') ? saved : 'patient';
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dashboard_perspective', perspective);
+    } catch {}
+  }, [perspective]);
+
   const metrics = [
     { title: "Total Q&As Processed", value: "25,847", change: "+12.3%", trend: "up", icon: "fas fa-comments" },
-    { title: "Model Accuracy", value: "94.2%", change: "+2.1%", trend: "up", icon: "fas fa-bullseye" },
+    { title: perspective === 'patient' ? "Comprehensibility" : "Model Accuracy", value: perspective === 'patient' ? "4.7/5" : "94.2%", change: "+2.1%", trend: "up", icon: perspective === 'patient' ? "fas fa-user" : "fas fa-bullseye" },
     { title: "Avg Processing Time", value: "1.3s", change: "-0.2s", trend: "down", icon: "fas fa-bolt" },
-    { title: "Safety Score", value: "99.8%", change: "+0.1%", trend: "up", icon: "fas fa-shield-check" }
+    { title: perspective === 'patient' ? "Safety Score" : "Clinical Safety", value: "99.8%", change: "+0.1%", trend: "up", icon: "fas fa-shield-check" }
   ];
 
   const recentActivity = [
@@ -28,28 +40,16 @@ export default function Dashboard() {
     const fetchModelStatus = async () => {
       try {
         const { llmClient } = await import('@/lib/llm-client');
-        const status = await llmClient.getModelStatus();
-        
-        setModelStatus([{
-          name: "Custom LLM",
-          status: status.status,
-          accuracy: status.accuracy,
-          load: status.load
-        }]);
+        const status = await llmClient.getStatus();
+        setModelStatus([{ name: status.model_name || "Custom LLM", status: status.status, accuracy: status.accuracy, load: status.load }]);
       } catch (error) {
         console.error('Failed to fetch model status:', error);
-        setModelStatus([{
-          name: "Custom LLM",
-          status: "offline",
-          accuracy: 0,
-          load: 0
-        }]);
+        setModelStatus([{ name: "Custom LLM", status: "offline", accuracy: 0, load: 0 }]);
       }
     };
 
     fetchModelStatus();
     const interval = setInterval(fetchModelStatus, 30000); // Update every 30 seconds
-
     return () => clearInterval(interval);
   }, []);
 
@@ -61,10 +61,23 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">Monitor your medical AI summarization system</p>
         </div>
-        <Badge variant="outline" className="px-3 py-1">
-          <div className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse"></div>
-          System Online
-        </Badge>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">View as</span>
+            <div className="flex rounded-md overflow-hidden border">
+              <Button variant={perspective === 'patient' ? 'default' : 'ghost'} size="sm" onClick={() => setPerspective('patient')}>
+                <i className="fas fa-user mr-2"></i> Patient
+              </Button>
+              <Button variant={perspective === 'clinician' ? 'default' : 'ghost'} size="sm" onClick={() => setPerspective('clinician')}>
+                <i className="fas fa-user-md mr-2"></i> Clinician
+              </Button>
+            </div>
+          </div>
+          <Badge variant="outline" className="px-3 py-1">
+            <div className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse"></div>
+            System Online
+          </Badge>
+        </div>
       </div>
 
       {/* Key Metrics */}
@@ -114,7 +127,7 @@ export default function Dashboard() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-xs">
                   <div>
-                    <span className="text-muted-foreground">Accuracy: </span>
+                    <span className="text-muted-foreground">{perspective === 'patient' ? 'Comprehensibility' : 'Accuracy'}: </span>
                     <span className="font-medium text-foreground">{model.accuracy}%</span>
                   </div>
                   <div>
@@ -139,7 +152,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
+              {recentActivity.map((activity) => (
                 <div key={activity.id} className="flex items-start space-x-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs ${
                     activity.type === 'processing' ? 'bg-primary/10 text-primary' :
